@@ -1,0 +1,39 @@
+<div class="errors-container">
+  <h2>Istorija grešaka</h2>
+
+  <table mat-table [dataSource]="errors" class="mat-elevation-z2 full-width-table">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let error">{{ error.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="machineName">
+      <th mat-header-cell *matHeaderCellDef>Mašina</th>
+      <td mat-cell *matCellDef="let error">{{ error.machineName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="operation">
+      <th mat-header-cell *matHeaderCellDef>Operacija</th>
+      <td mat-cell *matCellDef="let error">{{ error.operation }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef>Poruka</th>
+      <td mat-cell *matCellDef="let error">{{ error.message }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef>Vreme</th>
+      <td mat-cell *matCellDef="let error">{{ error.timestamp }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="user">
+      <th mat-header-cell *matHeaderCellDef>Korisnik</th>
+      <td mat-cell *matCellDef="let error">{{ error.user }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id', 'machineName', 'operation', 'message', 'timestamp', 'user']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'machineName', 'operation', 'message', 'timestamp', 'user'];"></tr>
+  </table>
+</div>
+

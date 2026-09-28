@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Izmeni korisnika</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Ime</mat-label>
+    <input matInput [(ngModel)]="user.name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Prezime</mat-label>
+    <input matInput [(ngModel)]="user.lastname" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="user.email" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Uloga</mat-label>
+    <mat-select [(ngModel)]="user.role">
+      <mat-option value="Admin">Admin</mat-option>
+      <mat-option value="User">User</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Otkaži</button>
+  <button mat-raised-button color="primary" (click)="save()">Sačuvaj</button>
+</mat-dialog-actions>
+

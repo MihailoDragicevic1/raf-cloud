@@ -1,0 +1,46 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <a routerLink="/" class="logo">RAF Cloud</a>
+
+    <ng-container *ngIf="authService.isLoggedIn()">
+      <a
+        *ngIf="authService.hasPermission('can_read_users')"
+        routerLink="/users"
+        routerLinkActive="active-link"
+        class="nav-link"
+      >
+        Korisnici
+      </a>
+
+      <a
+        *ngIf="authService.hasPermission('can_search_machines')"
+        routerLink="/machines"
+        routerLinkActive="active-link"
+        class="nav-link"
+      >
+        Mašine
+      </a>
+
+      <a
+        *ngIf="authService.hasPermission('can_read_errors')"
+        routerLink="/errors"
+        routerLinkActive="active-link"
+        class="nav-link"
+      >
+        Greške
+      </a>
+    </ng-container>
+  </div>
+
+  <div class="navbar-right">
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/login" class="nav-link">Prijava</a>
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/register" class="nav-link">Registracija</a>
+
+    <button *ngIf="authService.isLoggedIn()" (click)="logout()" class="logout-btn">
+      Odjavi se
+    </button>
+  </div>
+</nav>
+
+
+

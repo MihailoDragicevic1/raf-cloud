@@ -1,0 +1,166 @@
+<div class="machine-list-container">
+  <h2>Mašine</h2>
+
+  <form [formGroup]="filterForm" (ngSubmit)="applyFilter()" class="filter-form">
+    <mat-form-field>
+      <mat-label>Naziv</mat-label>
+      <input matInput formControlName="name" placeholder="Pretraži po nazivu" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Tip</mat-label>
+      <input matInput formControlName="type" placeholder="Pretraži po tipu" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Lokacija</mat-label>
+      <input matInput formControlName="location" placeholder="Pretraži po lokaciji" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Svi</mat-option>
+        <mat-option value="active">Active</mat-option>
+        <mat-option value="inactive">Inactive</mat-option>
+        <mat-option value="maintenance">Maintenance</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="filter-actions">
+      <button mat-raised-button color="primary" type="submit">Pretraži</button>
+      <button mat-stroked-button color="warn" type="button" (click)="clearFilter()">Poništi</button>
+    </div>
+  </form>
+
+  <table mat-table [dataSource]="machines" class="mat-elevation-z2 full-width-table">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let machine">{{ machine.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Naziv</th>
+      <td mat-cell *matCellDef="let machine">{{ machine.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Tip</th>
+      <td mat-cell *matCellDef="let machine">{{ machine.type }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef>Lokacija</th>
+      <td mat-cell *matCellDef="let machine">{{ machine.location }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let machine">{{ machine.status }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Akcije</th>
+      <td mat-cell *matCellDef="let machine">
+
+        <button mat-stroked-button color="primary"
+                (click)="turnOn(machine.id)"
+                [disabled]="disableDuringOperation(machine.id) || !can('can_start_machines')">
+          Upali
+        </button>
+
+        <button mat-stroked-button color="accent"
+                (click)="turnOff(machine.id)"
+                [disabled]="disableDuringOperation(machine.id) || !can('can_stop_machines')">
+          Ugasi
+        </button>
+
+        <button mat-stroked-button color="warn"
+                (click)="restart(machine.id)"
+                [disabled]="disableDuringOperation(machine.id) || !can('can_restart_machines')">
+          Restartuj
+        </button>
+
+        <button mat-stroked-button color="accent"
+                (click)="openScheduleModal(machine.id)">
+          Zakaži
+        </button>
+
+        <button mat-flat-button color="warn"
+                (click)="deleteMachine(machine.id)"
+                [disabled]="disableDuringOperation(machine.id) || !can('can_destroy_machines')">
+          Obriši
+        </button>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <div class="add-machine-button">
+    <button mat-raised-button color="primary" routerLink="/machines/add">
+      Dodaj novu mašinu
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showScheduleModal" class="modal-overlay" (click)="closeScheduleModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Zakaži operaciju na mašini</h3>
+
+    <form [formGroup]="scheduleForm" (ngSubmit)="submitScheduleOperation()" class="schedule-form">
+
+      <mat-form-field>
+        <mat-label>Operacija</mat-label>
+        <mat-select formControlName="operation">
+          <mat-option value="START">Upali</mat-option>
+          <mat-option value="STOP">Ugasi</mat-option>
+          <mat-option value="RESTART">Restartuj</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Datum i vreme</mat-label>
+        <input matInput type="datetime-local" formControlName="scheduledDateTime" />
+      </mat-form-field>
+
+      <div class="modal-actions">
+        <button mat-raised-button color="primary" type="submit">
+          Zakaži
+        </button>
+        <button mat-stroked-button type="button" (click)="closeScheduleModal()">
+          Otkaži
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="scheduledOperations.length > 0" class="scheduled-ops">
+      <h4>Zakazane operacije:</h4>
+      <div *ngFor="let op of scheduledOperations" class="scheduled-op-item">
+        <div class="op-info">
+          <span class="op-type">{{ op.operation }}</span>
+          <span class="op-time">{{ op.scheduledTime | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="op-actions">
+          <span [ngClass]="'status-' + op.status.toLowerCase()">{{ op.status }}</span>
+          <button mat-icon-button color="warn"
+                  (click)="cancelScheduledOperation(op.id)"
+                  [disabled]="op.status !== 'PENDING'"
+                  title="Otkaži operaciju">
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="scheduledOperations.length === 0" class="no-scheduled">
+      <p>Nema zakazanih operacija</p>
+    </div>
+
+  </div>
+</div>
+
+

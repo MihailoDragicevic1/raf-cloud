@@ -1,0 +1,100 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <h2>Registracija</h2>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registrationForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email adresa</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="Unesite email"
+          [(ngModel)]="email"
+          formControlName="email"
+        />
+        <mat-error *ngIf="registrationForm.get('email')?.hasError('required')">
+          Email je obavezan
+        </mat-error>
+        <mat-error *ngIf="registrationForm.get('email')?.hasError('email')">
+          Unesite validnu email adresu
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ime</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Unesite ime"
+          [(ngModel)]="name"
+          [ngModelOptions]="{standalone: true}"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Prezime</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Unesite prezime"
+          [(ngModel)]="lastname"
+          [ngModelOptions]="{standalone: true}"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Lozinka</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Unesite lozinku"
+          [(ngModel)]="password"
+          formControlName="password"
+        />
+        <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
+          Lozinka je obavezna
+        </mat-error>
+        <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
+          Lozinka mora imati najmanje 6 karaktera
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Potvrdite lozinku</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Potvrdite lozinku"
+          formControlName="passwordConfirm"
+        />
+        <mat-error *ngIf="registrationForm.get('passwordConfirm')?.hasError('required')">
+          Potvrda lozinke je obavezna
+        </mat-error>
+        <mat-error *ngIf="registrationForm.get('passwordConfirm')?.hasError('minlength')">
+          Lozinka mora imati najmanje 6 karaktera
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onRegister()"
+        [disabled]="!registrationForm.valid || isSubmitting"
+        class="full-width"
+      >
+        {{ isSubmitting ? 'Registrujem se...' : 'Registruj se' }}
+      </button>
+
+      <p class="login-link">
+        Već imaš nalog?
+        <a (click)="goToLogin()" style="cursor: pointer; color: #1976d2; text-decoration: underline;">
+          Prijavi se
+        </a>
+      </p>
+    </form>
+  </mat-card>
+</div>

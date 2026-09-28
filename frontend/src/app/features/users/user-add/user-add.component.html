@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>Dodaj korisnika</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Ime</mat-label>
+    <input
+      matInput
+      [(ngModel)]="user.name"
+      #name="ngModel"
+      required
+      placeholder="Unesite ime"
+    />
+    <mat-error *ngIf="name.invalid && name.touched">
+      Ime je obavezno!
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Prezime</mat-label>
+    <input
+      matInput
+      [(ngModel)]="user.lastname"
+      #lastname="ngModel"
+      required
+      placeholder="Unesite prezime"
+    />
+    <mat-error *ngIf="lastname.invalid && lastname.touched">
+      Prezime je obavezno!
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      [(ngModel)]="user.email"
+      #email="ngModel"
+      required
+      email
+      placeholder="Unesite email"
+    />
+    <mat-error *ngIf="email.invalid && email.touched">
+      Unesite ispravnu email adresu!
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Uloga</mat-label>
+    <mat-select [(ngModel)]="user.role" #role="ngModel" required>
+      <mat-option value="Admin">Admin</mat-option>
+      <mat-option value="User">User</mat-option>
+    </mat-select>
+    <mat-error *ngIf="role.invalid && role.touched">
+      Uloga je obavezna!
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Otkaži</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="save()"
+    [disabled]="!user.name || !user.lastname || !user.email || !user.role"
+  >
+    Sačuvaj
+  </button>
+</mat-dialog-actions>
+
+

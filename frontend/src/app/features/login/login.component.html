@@ -1,0 +1,37 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <h2>Prijava</h2>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email adresa</mat-label>
+      <input
+        matInput
+        type="email"
+        placeholder="Unesite email"
+        [(ngModel)]="email"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Lozinka</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="Unesite lozinku"
+        [(ngModel)]="password"
+      />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="onLogin()" class="full-width">
+      Prijavi se
+    </button>
+
+    <p class="register-link">
+      Nemaš nalog?
+      <a routerLink="/register" style="cursor: pointer; color: #1976d2; text-decoration: underline;">
+        Registruj se ovde
+      </a>
+    </p>
+  </mat-card>
+</div>
+
